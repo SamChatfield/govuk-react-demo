@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import DatePicker from './DatePicker';
@@ -21,7 +22,20 @@ describe('test date picker component', () => {
 
         await waitFor(() => {
             expect(screen.getByText(/There is a problem/i)).toBeDefined();
-        })
+        });
     });
+
+    it('should display two messages saying "some error" after clicking the Submit button twice', async () => {
+        render(<DatePicker />);
+
+        const submitButton = screen.getByText('Submit');
+
+        userEvent.click(submitButton);
+        userEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(screen.getAllByText(/Some error/)).toHaveLength(2);
+        });
+    })
 
 });
